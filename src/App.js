@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 
-import SearchBar from './search-bar';
+import Typeahead from './components/typeahead';
 
 const StyledWrapper = styled.div`
     width: 100vw;
@@ -51,9 +51,9 @@ export default class App extends Component {
             <StyledWrapper>
                 <StyledMask />
                 <StyledLogoLink href='https://interclub.io' target='_blank'>
-                    <img src='/assets/logo_48x48.png' />
+                    <img src='/assets/logo_48x48.png' alt='logo' /> Interclub
                 </StyledLogoLink>
-                <SearchBar />
+                <Typeahead fetchData={() => {}} />
             </StyledWrapper>
         );
     }
