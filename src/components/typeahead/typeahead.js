@@ -2,44 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import onClickOutside from 'react-onclickoutside';
-
-const mockData = [
-  {
-    id: 1,
-    name: 'Kitty',
-  }, {
-    id: 2,
-    name: 'Maria',
-  }, {
-    id: 3,
-    name: 'Nala',
-  }, {
-    id: 4,
-    name: 'Claudia',
-  }, {
-    id: 5,
-    name: 'Pixie',
-  }, {
-    id: 6,
-    name: 'Odie',
-  }, {
-    id: 7,
-    name: 'Doggie',
-  }, {
-    id: 8,
-    name: 'Rabo',
-  }, {
-    id: 10,
-    name: 'Lacinho',
-  },
-];
-
+import 'whatwg-fetch';
 
 const StyledWrapper = styled.div`
   margin-top: 174px;
 `
+
+const SuggestedList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`
+
 const SuggestionHighlight = styled.li`
   background: lightgrey;
+  padding: 10px;
+`
+
+const SuggestionLine = styled.li`
+  padding: 10px;
 `
 
 const SuggestionsList = styled.div`
@@ -73,11 +54,11 @@ const StyledInput = styled.input`
 class Typeahead extends Component {
   static propTypes = {
     fetchData: PropTypes.func.isRequired,
+    data: PropTypes.array.isRequired, // TODO: important remove this and create a shape!
   }
 
   constructor(props) {
       super(props);
-
       this.state = {
           searchValue: '',
           openList: false,
@@ -94,6 +75,17 @@ class Typeahead extends Component {
       })
     }
   }
+
+  getHighlightedText(text, higlight) {
+    // Split on higlight term and include term into parts, ignore case
+    let parts = text.split(new RegExp(`(${higlight})`, 'gi'));
+    return <span> { parts.map((part, i) =>
+        <span key={i} style={part.toLowerCase() === higlight.toLowerCase() ? { fontWeight: 'bold', color: '#c917a0' } : {} }>
+            { part }
+        </span>)
+    } </span>;
+}
+
 
   _handleKeys = (e) => {
     const { highLighted } = this.state;
@@ -119,28 +111,40 @@ class Typeahead extends Component {
   }
 
   render() {
-      return (
-          <StyledWrapper>
-              <StyledInput
-                  type='text'
-                  value={this.state.searchValue}
-                  onChange={this._handleSearchValueChange}
-                  placeholder='Enter Member Name or Number...'
-                  onKeyDown={this._handleKeys}
-                  openList={this.state.openList}
-                />
-                  <SuggestionsList openList={this.state.openList} >
-                    <ul>
-                      {mockData.map((ent, index) => index === this.state.highLighted ? <SuggestionHighlight>{ent.name}</SuggestionHighlight> : <li>{ent.name}</li>)}
-                    </ul>
-                  </SuggestionsList>
-          </StyledWrapper>
-      )
+    const { getHighlightedText } = this;
+    const { searchValue } = this.state;
+    return (
+      <StyledWrapper>
+        <StyledInput
+            type='text'
+            value={this.state.searchValue}
+            onChange={this._handleSearchValueChange}
+            placeholder='Enter Member Name or Number...'
+            onKeyDown={this._handleKeys}
+            openList={this.state.openList}
+          />
+            <SuggestionsList openList={this.state.openList} >
+              <SuggestedList>
+                {this.props.data.map((ent, index) => index === this.state.highLighted ?
+                  <SuggestionHighlight>{getHighlightedText(ent.name, searchValue)}</SuggestionHighlight> : <SuggestionLine>{getHighlightedText(ent.name, searchValue)}</SuggestionLine>)}
+              </SuggestedList>
+            </SuggestionsList>
+      </StyledWrapper>
+    )
   }
 
   _handleSearchValueChange = e => {
+      const { fetchData } = this.state;
+      const { value } = e.target;
+
+      // prevent request without chars
+      if (value) {
+        fetchData(e.target.value);
+      }
+
+
       this.setState({
-          searchValue: e.target.value,
+          searchValue: value,
           openList: true,
       });
   }

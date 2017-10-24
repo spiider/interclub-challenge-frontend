@@ -46,6 +46,25 @@ const StyledLogoLink = styled.a`
 `;
 
 export default class App extends Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+        data: [],
+      };
+    }
+
+    fetchData = (term) => {
+      // TODO: difine the endpoint in a separeated file
+      fetch(`http://localhost:4000/api/search?s=${term}`, { method: 'GET' })
+      .then(res => (res.status === 200) ? res.json() : [])
+      .then(result => {
+        this.setState({
+          data: result,
+        });
+      });
+    }
+
     render() {
         return (
             <StyledWrapper>
@@ -53,7 +72,7 @@ export default class App extends Component {
                 <StyledLogoLink href='https://interclub.io' target='_blank'>
                     <img src='/assets/logo_48x48.png' alt='logo' /> Interclub
                 </StyledLogoLink>
-                <Typeahead fetchData={() => {}} />
+                <Typeahead fetchData={this.fetchData} data={this.state.data} />
             </StyledWrapper>
         );
     }
