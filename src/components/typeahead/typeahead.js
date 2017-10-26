@@ -5,7 +5,7 @@ import onClickOutside from 'react-onclickoutside';
 import 'whatwg-fetch';
 
 const StyledWrapper = styled.div`
-  margin-top: 174px;
+  height: 32px;
 `
 
 const SuggestedList = styled.ul`
