@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-
+import { API_BASE } from './constants';
 import Typeahead from './components/typeahead';
+import 'whatwg-fetch';
 
 const StyledWrapper = styled.div`
     width: 100vw;
@@ -56,7 +57,7 @@ export default class App extends Component {
 
     fetchData = (term) => {
       // TODO: difine the endpoint in a separeated file
-      fetch(`http://localhost:4000/api/search?s=${term}`, { method: 'GET' })
+      fetch(`${API_BASE}/search?s=${term}`, { method: 'GET' })
       .then(res => (res.status === 200) ? res.json() : [])
       .then(result => {
         this.setState({

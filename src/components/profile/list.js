@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { API_BASE } from '../../constants';
+import 'whatwg-fetch';
 
 const ModalOverlay  = styled.div`
   z-index: 99;
@@ -11,12 +13,11 @@ const ModalOverlay  = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
 `
-
 const Modal = styled.div`
   display: block;
   width: 600px;
   max-width: 100%;
-  height: 186px;
+  height: 400px;
   max-height: 100%;
   position: fixed;
   z-index: 100;
@@ -49,61 +50,71 @@ const ModalGuts = styled.div`
   width: 100%;
   height: 100%;
   padding: 20px 50px 20px 20px;
-  overflow: none;
+  overflow: auto;
 `
-const UserPic = styled.div`
-  width: 30%;
+const UserCard = styled.div`
+  margin: 6px;
+  height: 70px;
+`
+const UserName = styled.p`
+  font-size: 16px;
   float: left;
 `
-const UserInfo = styled.div`
-  width: 68%;
-  float: left;
-`
-
-const UserNumber = styled.h4`
+const UserNumber = styled.span`
   color: grey;
-  margin-top: -18px;
+  float: left;
+  padding-right: 10px;
 `
-const SomeExtraInfo = styled.p`
-
+const UserPic = styled.img`
+  float: left;
+  margin-right: 10px;
 `
 
-class Profile extends Component {
+class List extends Component {
   static propTypes = {
     onClose: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired, // TODO: important remove this and create a shape!
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      user: props.user,
+      data: [],
     };
   }
 
+  componentDidMount() {
+    fetch(`${API_BASE}/list-members`, { method: 'GET' })
+    .then(res => (res.status === 200) ? res.json() : [])
+    .then(result => {
+      this.setState({
+        data: result,
+      });
+    });
+  }
+
   render() {
-    const { user } = this.state;
     return (
-    <div>
+      <div>
+        <ModalOverlay></ModalOverlay>
         <ModalOverlay onClick={this.props.onClose}></ModalOverlay>
         <Modal>
             <CloseBtn onClick={this.props.onClose}>x</CloseBtn>
           <ModalGuts>
-            <UserPic>
-              <img src='http://via.placeholder.com/150x150' alt='user picture' />
-            </UserPic>
-            <UserInfo>
-              <h1>{user.name}</h1>
-              <UserNumber># {user.number}</UserNumber>
-              <SomeExtraInfo>
-                Inquietude simplicity terminated she compliment remarkably few her nay. The weeks are ham asked jokes. Neglected perceived shy nay concluded.
-              </SomeExtraInfo>
-            </UserInfo>
+            {this.state.data.map(user =>
+              <UserCard>
+                <UserPic src='http://via.placeholder.com/50x50' alt='user picture' />
+                <UserName>
+                  {`${user.first_name} ${user.last_name}`}
+                  <UserNumber># {user.number}</UserNumber>
+                </UserName>
+              </UserCard>
+            )}
           </ModalGuts>
         </Modal>
-    </div>
+      </div>
     )
   }
+
 }
 
-export default Profile;
+export default List;

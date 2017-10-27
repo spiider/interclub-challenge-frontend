@@ -1,3 +1,3 @@
 import Profile from './profile';
-
-export default Profile;
+import ListProfiles from './list';
+export { Profile, ListProfiles };
