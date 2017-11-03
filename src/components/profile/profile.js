@@ -11,7 +11,6 @@ const ModalOverlay  = styled.div`
 	height: 100%;
 	background: rgba(0, 0, 0, 0.6);
 `
-
 const Modal = styled.div`
 	display: block;
 	width: 600px;
@@ -40,8 +39,6 @@ const CloseBtn = styled.div`
 	font-size: 1.3rem;
 	cursor: pointer;
 `
-
-
 const ModalGuts = styled.div`
 	position: absolute;
 	top: 0;
@@ -59,7 +56,6 @@ const UserInfo = styled.div`
 	width: 68%;
 	float: left;
 `
-
 const UserNumber = styled.h4`
 	color: grey;
 	margin-top: -18px;

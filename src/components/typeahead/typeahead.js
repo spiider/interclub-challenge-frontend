@@ -7,19 +7,16 @@ import { Profile, ListProfiles } from '../profile';
 const StyledWrapper = styled.div`
     height: 32px;
 `
-
 const SuggestedList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
 `
-
 const SuggestionHighlight = styled.li`
     background: lightgrey;
     padding: 10px;
     cursor: pointer;
 `
-
 const SuggestionLine = styled.li`
     padding: 10px;
     cursor: pointer;
@@ -29,14 +26,12 @@ const UserNumber = styled.span`
     font-size: 10px;
     float: right;
 `
-
 const ShowAllUser = styled.li`
     padding: 10px;
     font-size: 10px;
     color: #7e58c1;
     cursor: pointer;
 `
-
 const SuggestionsList = styled.div`
     visibility: ${props => props.openList ? 'visible' : 'hidden'};
     background: #fff;
@@ -45,7 +40,6 @@ const SuggestionsList = styled.div`
     border: 1px solid rgba(0, 0, 0, .1);
     max-height: 300px;
 `
-
 const StyledInput = styled.input`
     border-radius: 4px;
     border-bottom-left-radius: ${props => props.openList ? 0 : '4px'};

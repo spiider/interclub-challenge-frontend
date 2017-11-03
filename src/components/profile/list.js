@@ -41,8 +41,6 @@ const CloseBtn = styled.div`
 	font-size: 1.3rem;
 	cursor: pointer;
 `
-
-
 const ModalGuts = styled.div`
 	position: absolute;
 	top: 0;
