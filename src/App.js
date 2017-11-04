@@ -72,7 +72,7 @@ export default class App extends Component {
 				<StyledLogoLink href='https://interclub.io' target='_blank'>
 				<img src='/assets/logo_48x48.png' alt='logo' /> Interclub
 			</StyledLogoLink>
-			<Typeahead fetchData={this.fetchData} data={this.state.data} />
+			<Typeahead fetchData={this.fetchData} data={this.state.data} waitTime={600} />
 		</StyledWrapper>
 		);
 	}

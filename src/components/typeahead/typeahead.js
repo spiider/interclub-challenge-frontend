@@ -75,8 +75,13 @@ class Typeahead extends Component {
             showProfile: false,
             user: null,
             showAll: false,
+            timeout: props.waitTime,
         };
     }
+
+	componentDidMount() {
+		this.timer = null;
+	}
 
     // close list when click out side component
     handleClickOutside = evt => {
@@ -154,19 +159,23 @@ class Typeahead extends Component {
     }
 
     _handleSearchValueChange = e => {
-        const { fetchData } = this.state;
-        const { value } = e.target;
+		clearTimeout(this.timer);
 
-        // prevent request without chars
-        if (value) {
-            fetchData(e.target.value);
-        }
+        const { fetchData, timeout = 1000 } = this.state;
+        const { value } = e.target;
 
         this.setState({
             searchValue: value,
             openList: true,
         });
+
+		this.timer = setTimeout(() => {
+			if (value) {
+		   		fetchData(value);
+			}
+		}, timeout); //TODO: rewrite this initialize a new function isn't good
     }
+
 
     render() {
         const { getHighlightedText, openProfile } = this;
